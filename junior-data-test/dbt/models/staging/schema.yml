@@ -20,3 +20,20 @@ models:
                 values: ['FIJO', 'EV90', 'EV180', 'INDF', 'OBRA', 'UNKNOWN']
 
   # PART 2: add stg_visits and its tests here.
+  - name: stg_visits
+    description: Visits with normalised visit_status.
+    columns:
+      # Unique, not null visit_id
+      - name: visit_id
+        data_tests:
+          - unique
+          - not_null
+
+      # Accepted visit_status values: ['OK', 'INCID', 'INFO', 'NOVIS', 'UNKNOWN']. If it's not one of these values, the test should fail.
+      - name: visit_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['OK', 'INCID', 'INFO', 'NOVIS', 'UNKNOWN']
+      
+      # Test that check if created_at parameter is not from a future day: tests/assert_visits_created_at_not_in_future.sql

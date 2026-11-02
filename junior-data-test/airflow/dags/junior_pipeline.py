@@ -33,5 +33,13 @@ with DAG(
         bash_command=f"cd {DBT_DIR} && dbt run --profiles-dir .",
     )
 
+    test_models = BashOperator(
+        task_id="test_models",
+        bash_command=f"cd {DBT_DIR} && dbt test --profiles-dir .",
+    )
+
     # build_models only starts once load_data has finished successfully.
     load_data >> build_models
+
+    # tests_models only starts once build_models has finished successfully.
+    build_models >> test_models
